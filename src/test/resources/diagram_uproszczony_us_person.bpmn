@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0qklheh" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.7.3">
+  <bpmn:process id="Process_0iuslkh" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Oświadczenie dotyczące transgranicznych Transakcji Swap 1">
+      <bpmn:outgoing>Flow_0deknfa</bpmn:outgoing>
+    </bpmn:startEvent>
+    
+    <bpmn:userTask id="Pytanie_I" camunda:formKey="I">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="OsobaAmerykanska" label="Osoba amerykańska" type="boolean">
+            <camunda:properties>
+              <camunda:property id="annotation" value="Należę do żadnej z kategorii Osób amerykańskich. 2" />
+              <camunda:property id="next" value="Wynik_Ankiety" />
+              <camunda:property id="value" value="0" />
+            </camunda:properties>
+          </camunda:formField>
+          <camunda:formField id="OsobaNieamerykanska" label="Osoba nieamerykańska" type="boolean">
+            <camunda:properties>
+              <camunda:property id="annotation" value="Nie należę do co najmniej jednej kategorii Osób amerykańskich." />
+              <camunda:property id="next" value="Sekcja_II" />
+              <camunda:property id="value" value="1" />
+            </camunda:properties>
+          </camunda:formField>
+        </camunda:formData>
+        <camunda:properties>
+          <camunda:property name="annotation" value="/Prosimy zaznaczyć jedno z poniższych pól/" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0b50noi</bpmn:incoming>
+      <bpmn:outgoing>Flow_01ynkb3</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:sequenceFlow id="Flow_0deknfa" sourceRef="StartEvent_1" targetRef="Sekcja_I" />
+
+    <bpmn:exclusiveGateway id="Gateway_0dt8doy">
+      <bpmn:incoming>Flow_01ynkb3</bpmn:incoming>
+      <bpmn:outgoing>Flow_1nx9t5c</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1af80nq</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:sequenceFlow id="Flow_01ynkb3" sourceRef="Pytanie_I" targetRef="Gateway_0dt8doy" />
+    <bpmn:endEvent id="Event_0x5vc3o" name="Koniec">
+      <bpmn:incoming>Flow_11mw5hy</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:parallelGateway id="Sekcja_II" name="II. Dodatkowe oświadczenia Osoby nieamerykańskiej">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="annotations" value="/Jeżeli w pkt I zaznaczyliście Państwo pole: „Osoba nieamerykańska”, prosimy wypełnić sekcje (A) i (B) poniżej, zaznaczając jedno pole w każdej sekcji/ 3" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1nx9t5c</bpmn:incoming>
+      <bpmn:outgoing>Flow_1dx9o9e</bpmn:outgoing>
+      <bpmn:outgoing>Flow_02ijfgy</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="Flow_1nx9t5c" sourceRef="Gateway_0dt8doy" targetRef="Sekcja_II" />
+    <bpmn:sequenceFlow id="Flow_1dx9o9e" sourceRef="Sekcja_II" targetRef="Pytanie_A" />
+    <bpmn:sequenceFlow id="Flow_02ijfgy" sourceRef="Sekcja_II" targetRef="Pytanie_B" />
+    <bpmn:userTask id="Pytanie_A" name="(A) Oświadczenia dotyczące statusu Podmiotu powiązanego 4" camunda:formKey="A">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="NieJestPodmiotemPowiazanym" label="Klient, który nie jest Podmiotem powiązanym" type="boolean">
+            <camunda:properties>
+              <camunda:property id="nextSelectedElement" value="Wynik_II" />
+              <camunda:property id="annotation" value="Nie jestem Podmiotem powiązanym." />
+              <camunda:property id="value" value="1" />
+            </camunda:properties>
+          </camunda:formField>
+          <camunda:formField id="JestPodmiotemPowiazanym" label="Klient, który jest Podmiotem powiązanym" type="boolean">
+            <camunda:properties>
+              <camunda:property id="nextSelectedElement" value="Wynik_II" />
+              <camunda:property id="value" value="0" />
+              <camunda:property id="annotation" value="Jestem Podmiotem powiązanym." />
+            </camunda:properties>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1dx9o9e</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ev3ksm</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Pytanie_B" name="(B) Oświadczenia dotyczące gwarancji" camunda:formKey="B">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="GwarancjaOsobNieamerykanskich" label="Gwarancje Osób nieamerykańskich" type="boolean">
+            <camunda:properties>
+              <camunda:property id="nextSelectedElement" value="Wynik_II" />
+              <camunda:property id="value" value="1" />
+              <camunda:property id="annotation" value="Moje zobowiązania wobec BNP Paribas Bank Polska S.A w związku z Transakcją Swap nie są wsparte żadną Gwarancją (o której wiem) inną niż Gwarancja udzielona przez podmiot, który według mojego uzasadnionego przekonania nie mieści się w żadnej kategorii Osób amerykańskich." />
+            </camunda:properties>
+          </camunda:formField>
+          <camunda:formField id="GwarancjaOsobAmerykanskich" label="Gwarancje Osób amerykańskich" type="boolean">
+            <camunda:properties>
+              <camunda:property id="nextSelectedElement" value="Sekcja_Gwarancje" />
+              <camunda:property id="value" value="0" />
+              <camunda:property id="annotation" value="Moje zobowiązania wobec BNP Paribas Bank Polska S.A. w związku z Transakcją Swap są pokryte Gwarancją udzieloną przez podmiot, który według mojego uzasadnionego przekonania mieści się przynajmniej w jednej kategorii Osób amerykańskich." />
+            </camunda:properties>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02ijfgy</bpmn:incoming>
+      <bpmn:outgoing>Flow_1o8ts69</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_0s1h8ci">
+      <bpmn:incoming>Flow_1o8ts69</bpmn:incoming>
+      <bpmn:outgoing>Flow_11bszi9</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1ceh481</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1o8ts69" sourceRef="Pytanie_B" targetRef="Gateway_0s1h8ci" />
+    <bpmn:sequenceFlow id="Flow_11bszi9" sourceRef="Gateway_0s1h8ci" targetRef="Sekcja_Gwarancje" />
+    <bpmn:sequenceFlow id="Flow_08jfxuo" sourceRef="Sekcja_Gwarancje" targetRef="GwarancjeInstytucjeFinansowe" />
+    <bpmn:sequenceFlow id="Flow_01scv6z" sourceRef="Sekcja_Gwarancje" targetRef="StatuspowiazaniaDealerSwapowy" />
+    <bpmn:userTask id="GwarancjeInstytucjeFinansowe" name="(C)(1) Gwaranci, który są Instytucjami finansowymi" camunda:formKey="C1">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="BrakGwarancjiInstytucjiFinansowych" label="Brak Gwarancji Instytucji finansowych" type="boolean">
+            <camunda:properties>
+              <camunda:property id="nextSelectedElement" value="Wynik_Gwarancje" />
+              <camunda:property id="annotation" value="Żadna Osoba amerykańska, która udziela Gwarancji pokrywającej moje zobowiązania wobec BNP Paribas Bank Polska S.A. w związku z Transakcją Swap, nie jest Instytucją finansową." />
+              <camunda:property id="value" value="0" />
+            </camunda:properties>
+          </camunda:formField>
+          <camunda:formField id="GwarancjaInstytucjiFinansowych" label="Gwarancje Instytucji finansowych" type="boolean">
+            <camunda:properties>
+              <camunda:property id="nextSelectedElement" value="Wynik_Gwarancje" />
+              <camunda:property id="annotation" value="Co najmniej jedna Osoba amerykańska, która udziela Gwarancji pokrywającej moje zobowiązania wobec BNP Paribas Bank Polska S.A. w związku z Transakcją Swap, jest Instytucją finansową." />
+              <camunda:property id="value" value="0" />
+            </camunda:properties>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08jfxuo</bpmn:incoming>
+      <bpmn:outgoing>Flow_0z373n9</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="StatuspowiazaniaDealerSwapowy" name="(C)(2) Status powiązania z Dealerem swapowym" camunda:formKey="C2">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="BrakPowiązaniaDealeremSwapowym" label="Brak powiązania z Dealerem swapowym" type="boolean">
+            <camunda:properties>
+              <camunda:property id="nextSelectedElement" value="Wynik_Gwarancje" />
+              <camunda:property id="annotation" value="Nie mam powiązania z Dealerem swapowym zarejestrowanym przez Commodity Futures Trading Commission (CFTC)." />
+              <camunda:property id="value" value="0" />
+            </camunda:properties>
+          </camunda:formField>
+          <camunda:formField id="PowiązaniaDealeremSwapowym" label="Powiązanie z Dealerem swapowym" type="boolean">
+            <camunda:properties>
+              <camunda:property id="nextSelectedElement" value="Wynik_Gwarancje" />
+              <camunda:property id="annotation" value="Mam powiązania z Dealerem swapowym zarejestrowanym przez Commodity Futures Trading Commission (CFTC) i nie angażuje się w taki poziom dealerskiej działalności swapowej, który wymagałby rejestracji w CFTC w charakterze Dealera swapowego." />
+              <camunda:property id="value" value="0" />
+            </camunda:properties>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_01scv6z</bpmn:incoming>
+      <bpmn:outgoing>Flow_09c1f8r</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_1af80nq" sourceRef="Gateway_0dt8doy" targetRef="Wynik_Ankiety" />
+    <bpmn:sequenceFlow id="Flow_11mw5hy" sourceRef="Wynik_Ankiety" targetRef="Event_0x5vc3o" />
+    <bpmn:parallelGateway id="Sekcja_Gwarancje">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="annotation" value="/Jeżeli w sekcji (B) zaznaczyliście Państwo pole „Gwarancje Osób amerykańskich”, prosimy wskazać poniżej: w sekcji (C)(1) - czy te Gwarancje zostały udzielone przez Instytucje finansowe oraz w sekcji (C)(2) - czy są Państwo powiązani z Dealerem swapowym 5, zarejestrowanym przez Commodity Futures Trading Commission (CFTC)/" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_11bszi9</bpmn:incoming>
+      <bpmn:outgoing>Flow_08jfxuo</bpmn:outgoing>
+      <bpmn:outgoing>Flow_01scv6z</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="Flow_0z373n9" sourceRef="GwarancjeInstytucjeFinansowe" targetRef="Wynik_Gwarancje" />
+    <bpmn:parallelGateway id="Wynik_Gwarancje" name="Wynik_Gwarancje">
+      <bpmn:incoming>Flow_0z373n9</bpmn:incoming>
+      <bpmn:incoming>Flow_09c1f8r</bpmn:incoming>
+      <bpmn:outgoing>Flow_0zfw3jc</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="Flow_09c1f8r" sourceRef="StatuspowiazaniaDealerSwapowy" targetRef="Wynik_Gwarancje" />
+    <bpmn:exclusiveGateway id="Wynik_B" name="Wynik_B">
+      <bpmn:incoming>Flow_0zfw3jc</bpmn:incoming>
+      <bpmn:incoming>Flow_1ceh481</bpmn:incoming>
+      <bpmn:outgoing>Flow_02rmmma</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0zfw3jc" sourceRef="Wynik_Gwarancje" targetRef="Wynik_B" />
+    <bpmn:sequenceFlow id="Flow_1ceh481" sourceRef="Gateway_0s1h8ci" targetRef="Wynik_B" />
+    <bpmn:parallelGateway id="Wynik_II" name="Wynik_II">
+      <bpmn:incoming>Flow_1ev3ksm</bpmn:incoming>
+      <bpmn:incoming>Flow_02rmmma</bpmn:incoming>
+      <bpmn:outgoing>Flow_0pb1aqp</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="Flow_1ev3ksm" sourceRef="Pytanie_A" targetRef="Wynik_II" />
+    <bpmn:sequenceFlow id="Flow_02rmmma" sourceRef="Wynik_B" targetRef="Wynik_II" />
+    <bpmn:sequenceFlow id="Flow_0pb1aqp" sourceRef="Wynik_II" targetRef="Wynik_Ankiety" />
+    <bpmn:exclusiveGateway id="Wynik_Ankiety" name="Wynik Ankiety">
+      <bpmn:incoming>Flow_1af80nq</bpmn:incoming>
+      <bpmn:incoming>Flow_0pb1aqp</bpmn:incoming>
+      <bpmn:outgoing>Flow_11mw5hy</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0b50noi" sourceRef="Sekcja_I" targetRef="Pytanie_I" />
+    <bpmn:parallelGateway id="Sekcja_I" name="I. Oświadczenie Osoby nieamerykańskiej lub Osoby amerykańskiej">
+      <bpmn:incoming>Flow_0deknfa</bpmn:incoming>
+      <bpmn:outgoing>Flow_0b50noi</bpmn:outgoing>
+    </bpmn:parallelGateway>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0iuslkh">
+      <bpmndi:BPMNEdge id="Flow_1af80nq_di" bpmnElement="Flow_1af80nq">
+        <di:waypoint x="555" y="120" />
+        <di:waypoint x="1285" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02ijfgy_di" bpmnElement="Flow_02ijfgy">
+        <di:waypoint x="530" y="275" />
+        <di:waypoint x="530" y="310" />
+        <di:waypoint x="650" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nx9t5c_di" bpmnElement="Flow_1nx9t5c">
+        <di:waypoint x="530" y="145" />
+        <di:waypoint x="530" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01ynkb3_di" bpmnElement="Flow_01ynkb3">
+        <di:waypoint x="460" y="120" />
+        <di:waypoint x="505" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02rmmma_di" bpmnElement="Flow_02rmmma">
+        <di:waypoint x="1255" y="310" />
+        <di:waypoint x="1310" y="310" />
+        <di:waypoint x="1310" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1dx9o9e_di" bpmnElement="Flow_1dx9o9e">
+        <di:waypoint x="555" y="250" />
+        <di:waypoint x="593" y="250" />
+        <di:waypoint x="593" y="200" />
+        <di:waypoint x="650" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ev3ksm_di" bpmnElement="Flow_1ev3ksm">
+        <di:waypoint x="750" y="200" />
+        <di:waypoint x="1285" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1o8ts69_di" bpmnElement="Flow_1o8ts69">
+        <di:waypoint x="750" y="310" />
+        <di:waypoint x="815" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0deknfa_di" bpmnElement="Flow_0deknfa">
+        <di:waypoint x="218" y="120" />
+        <di:waypoint x="275" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0b50noi_di" bpmnElement="Flow_0b50noi">
+        <di:waypoint x="325" y="120" />
+        <di:waypoint x="360" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11bszi9_di" bpmnElement="Flow_11bszi9">
+        <di:waypoint x="840" y="335" />
+        <di:waypoint x="840" y="480" />
+        <di:waypoint x="885" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ceh481_di" bpmnElement="Flow_1ceh481">
+        <di:waypoint x="865" y="310" />
+        <di:waypoint x="1205" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08jfxuo_di" bpmnElement="Flow_08jfxuo">
+        <di:waypoint x="910" y="455" />
+        <di:waypoint x="910" y="400" />
+        <di:waypoint x="990" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01scv6z_di" bpmnElement="Flow_01scv6z">
+        <di:waypoint x="910" y="505" />
+        <di:waypoint x="910" y="550" />
+        <di:waypoint x="990" y="550" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0z373n9_di" bpmnElement="Flow_0z373n9">
+        <di:waypoint x="1090" y="400" />
+        <di:waypoint x="1160" y="400" />
+        <di:waypoint x="1160" y="455" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09c1f8r_di" bpmnElement="Flow_09c1f8r">
+        <di:waypoint x="1090" y="550" />
+        <di:waypoint x="1160" y="550" />
+        <di:waypoint x="1160" y="505" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0zfw3jc_di" bpmnElement="Flow_0zfw3jc">
+        <di:waypoint x="1185" y="480" />
+        <di:waypoint x="1230" y="480" />
+        <di:waypoint x="1230" y="335" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11mw5hy_di" bpmnElement="Flow_11mw5hy">
+        <di:waypoint x="1335" y="120" />
+        <di:waypoint x="1382" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pb1aqp_di" bpmnElement="Flow_0pb1aqp">
+        <di:waypoint x="1310" y="175" />
+        <di:waypoint x="1310" y="145" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Gateway_0dt8doy_di" bpmnElement="Gateway_0dt8doy" isMarkerVisible="true">
+        <dc:Bounds x="505" y="95" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1w5tbf4_di" bpmnElement="Sekcja_II">
+        <dc:Bounds x="505" y="225" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="407" y="240" width="86" height="53" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1jsy0uv_di" bpmnElement="Sekcja_I">
+        <dc:Bounds x="275" y="95" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="257" y="152" width="86" height="66" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="182" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="156" y="145" width="89" height="53" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0dyz5kl_di" bpmnElement="Pytanie_A">
+        <dc:Bounds x="650" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1cbmhml_di" bpmnElement="Pytanie_B">
+        <dc:Bounds x="650" y="270" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0s1h8ci_di" bpmnElement="Gateway_0s1h8ci" isMarkerVisible="true">
+        <dc:Bounds x="815" y="285" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0c339za_di" bpmnElement="GwarancjeInstytucjeFinansowe">
+        <dc:Bounds x="990" y="360" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1e9ydah_di" bpmnElement="StatuspowiazaniaDealerSwapowy">
+        <dc:Bounds x="990" y="510" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0c5j6zu_di" bpmnElement="Wynik_Gwarancje">
+        <dc:Bounds x="1135" y="455" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1036" y="470" width="88" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1q0j2br_di" bpmnElement="Wynik_B" isMarkerVisible="true">
+        <dc:Bounds x="1205" y="285" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1209" y="255" width="43" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_13ytu9p_di" bpmnElement="Sekcja_Gwarancje">
+        <dc:Bounds x="885" y="455" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_01zkqwg_di" bpmnElement="Wynik_II">
+        <dc:Bounds x="1285" y="175" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1239" y="165" width="42" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0dzqihe_di" bpmnElement="Wynik_Ankiety" isMarkerVisible="true">
+        <dc:Bounds x="1285" y="95" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1276" y="65" width="69" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0v2gq4p_di" bpmnElement="Pytanie_I">
+        <dc:Bounds x="360" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0x5vc3o_di" bpmnElement="Event_0x5vc3o">
+        <dc:Bounds x="1382" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1383" y="145" width="35" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
